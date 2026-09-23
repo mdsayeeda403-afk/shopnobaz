@@ -1,0 +1,42 @@
+rules_version = '2';
+
+// এই ফাইলটা Firebase Console → Firestore Database → Rules ট্যাবে গিয়ে
+// কপি-পেস্ট করে "Publish" করতে হবে।
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ইউজার প্রোফাইল - যে কেউ পড়তে পারবে, শুধু নিজের প্রোফাইল এডিট করতে পারবে
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    // গল্প/কবিতা/উপন্যাস - সবাই পড়তে পারবে, শুধু লেখক নিজের লেখা তৈরি/এডিট/ডিলিট করতে পারবে
+    match /stories/{storyId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+                    && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if request.auth != null
+                    && resource.data.authorId == request.auth.uid;
+
+      // অধ্যায় - সবাই পড়তে পারবে, শুধু story-র মালিক অধ্যায় যোগ/এডিট করতে পারবে
+      match /chapters/{chapterId} {
+        allow read: if request.auth != null;
+        allow create, update, delete: if request.auth != null
+                    && get(/databases/$(database)/documents/stories/$(storyId)).data.authorId == request.auth.uid;
+      }
+
+      // কমেন্ট - লগইন করা সবাই কমেন্ট করতে পারবে, নিজের কমেন্ট এডিট/ডিলিট করতে পারবে
+      match /comments/{commentId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+                    && request.resource.data.userId == request.auth.uid;
+        allow update, delete: if request.auth != null
+                    && resource.data.userId == request.auth.uid;
+      }
+    }
+  }
+}

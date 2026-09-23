@@ -1,0 +1,32 @@
+name: shopnobaz
+description: "স্বপ্নবাজ - গল্প, কবিতা ও উপন্যাস লেখার ও পড়ার অ্যাপ"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+
+  # State management (সহজ রাখা হয়েছে, বড় হলে riverpod/provider এ যাওয়া যাবে)
+  provider: ^6.1.1
+
+  # UI helpers
+  google_fonts: ^6.1.0
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
