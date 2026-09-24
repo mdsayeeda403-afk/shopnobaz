@@ -27,6 +27,9 @@ jobs:
       - name: Android নেটিভ ফাইল অটো-জেনারেট করা
         run: flutter create --platforms=android --org com.shopnobaz .
 
+      - name: Kotlin ভার্সন আপডেট করা
+        run: sed -i 's/id "org.jetbrains.kotlin.android" version "[^"]*"/id "org.jetbrains.kotlin.android" version "2.1.0"/' android/settings.gradle
+
       - name: ডিপেন্ডেন্সি ইনস্টল
         run: flutter pub get
 
